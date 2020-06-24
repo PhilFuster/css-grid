@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="" />
+    <title>CSS Grid Image Gallery!</title>
+  </head>
+
+  <body>
+    <div class="overlay">
+      <div class="overlay-inner">
+        <button class="close">× Close</button>
+        <img class="overlay-inner__image" />
+      </div>
+    </div>
+
+    <section class="gallery"></section>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        padding: 50px;
+        font-family: sans-serif;
+        background: linear-gradient(to right, #f93d66, #6d47d9);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0 0 5px 0;
+      }
+
+      p {
+        margin: 0 0 20px 0;
+      }
+
+      .close {
+        background: none;
+        color: white;
+        border: 0;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 100px));
+        grid-template-rows: repeat(auto-fill, minmax(100px, 100px));
+        grid-auto-columns: 100px;
+        grid-auto-rows: 100px;
+        grid-auto-flow: dense;
+      }
+
+      .overlay {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.7);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: none;
+        z-index: 2;
+        height: 500px;
+        width: 500px;
+      }
+
+      .overlay.open {
+        display: grid;
+        top: 50%;
+        left: 50%;
+        margin-left: -250px;
+        margin-top: -250px;
+        box-shadow: 0 0 0 10000000px rgba(0, 0, 0, 0.6);
+      }
+
+      .overlay.open .overlay-inner {
+        place-self: center center;
+      }
+
+      .overlay figure {
+        background: white;
+        width: 700px;
+        padding: 20px;
+      }
+
+      .overlay img {
+        width: 100%;
+      }
+      .item {
+        overflow: hidden;
+        position: relative;
+      }
+
+      .item__overlay {
+        position: absolute;
+        top: 100%;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        background-color: rgba(98, 102, 72, 0.5);
+        width: 100%;
+        height: 100%;
+      }
+
+      /* .is-blurred {
+        filter: blur(2px);
+      } */
+
+      @keyframes overlayTransition {
+        0% {
+          top: 100%;
+        }
+        100% {
+          top: 0;
+        }
+      }
+
+      @keyframes overlayTransitionExit {
+        0% {
+          top: 0;
+        }
+
+        100% {
+          top: 100%;
+          /* display: none; */
+        }
+      }
+
+      .item .item__overlay {
+        animation: overlayTransitionExit 0.5s linear;
+      }
+      .item:hover .item__overlay {
+        animation: overlayTransition 0.5s linear;
+        animation-fill-mode: both;
+      }
+
+      .hidden {
+        display: none;
+      }
+      .item img {
+        object-fit: fill;
+      }
+
+      .item__link {
+        display: block;
+        border: 2px white solid;
+        color: white;
+        padding: 5px;
+        border-radius: 2px;
+      }
+
+      .item__link:hover {
+        cursor: pointer;
+      }
+      .v1 {
+        grid-row: span 1;
+      }
+      .v2 {
+        grid-row: span 2;
+      }
+      .v3 {
+        grid-row: span 3;
+      }
+      .v4 {
+        grid-row: span 4;
+      }
+      .h1 {
+        grid-column: span 1;
+      }
+      .h2 {
+        grid-column: span 2;
+      }
+      .h3 {
+        grid-column: span 3;
+      }
+      .h4 {
+        grid-column: span 4;
+      }
+    </style>
+
+    <script>
+      const dir = './images/';
+      const fileExtension = '.jpg';
+      const items = [];
+      const imgSrcs = [];
+      const gallery = document.getElementsByClassName('gallery')[0];
+      const overlay__closeBtn = document.querySelector('.close');
+      const overlay = document.querySelector('.overlay');
+      const body = document.querySelector('body');
+      for (i = 1; i <= 12; ++i) {
+        let src = `./images/${i}${fileExtension}`;
+        imgSrcs.push(src);
+      }
+      //
+      overlay__closeBtn.addEventListener('click', (event) => {
+        overlay.classList.remove('open');
+        body.classList.remove('is-blurred');
+      });
+      //
+      for (i = 0; i < 100; ++i) {
+        const hVal = Math.floor(Math.random() * 4 + 1);
+        const vVal = Math.floor(Math.random() * 4 + 1);
+        //
+        const item = document.createElement('div');
+        const cls = ['item', `h${hVal}`, `v${vVal}`];
+        item.classList.add(...cls);
+        //
+        const img = new Image();
+        const imgIndex = Math.floor(Math.random() * 11 + 1);
+        img.src = imgSrcs[imgIndex];
+        item.appendChild(img);
+        // create item overlay
+        let item__overlay = document.createElement('div');
+        item__overlay.classList.add('item__overlay', 'hidden');
+        // create imageLink that will onClick display big overlay of image
+        let imageLink = document.createElement('a');
+        imageLink.classList.add('item__link');
+        imageLink.setAttribute('data-imgNo', imgIndex);
+        // Add onClick event for displaying big overlay
+        imageLink.addEventListener('click', (event) => {
+          let overlayImage = document.querySelector('.overlay-inner__image');
+          let currentTarget = event.currentTarget;
+          overlayImage.setAttribute(
+            'src',
+            imgSrcs[currentTarget.getAttribute('data-imgNo')]
+          );
+          //
+          overlay.classList.add('open');
+          // put background blur filter on body tag
+          body.classList.add('is-blurred');
+        });
+        imageLink.textContent = 'View \u2192';
+        item__overlay.appendChild(imageLink);
+        item.appendChild(item__overlay);
+        //
+        item.addEventListener('mouseover', (event) => {
+          let element = event.currentTarget;
+          let itemOverlay = element.children[1];
+          itemOverlay.classList.remove('hidden');
+        });
+
+        gallery.appendChild(item);
+        items.push(item);
+      }
+    </script>
+  </body>
+</html>
