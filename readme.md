@@ -1,5 +1,7 @@
 ![](https://res.cloudinary.com/wesbos/image/upload/v1515524452/GRID-social-share_wlfzk3.png)
 
+# Thank you Wes Bos and Mozilla for providing this great course for free!
+# This is my run through of the course trying to do most of the examples myself before watching the video
 # CSS Grid Video Course
 
 Hey! These are the starter files and finished solutions. Grab the full course over at [CSSGrid.io](https://CSSGrid.io).
