@@ -128,8 +128,10 @@
         expanded = !expanded;
         menuBtn.setAttribute('aria-expanded', expanded);
         menuList.style.visibility = expanded
-          ? (menuList.style.visibility = 'visible')
-          : (menuList.style.visibility = 'hidden');
+          ? (menuList.style.visibility = 'visible') &&
+            (menuList.style.maxHeight = '500px')
+          : (menuList.style.visibility = 'hidden') &&
+            (menuList.style.maxHeight = '0');
         if (expanded) {
           close.style.display = 'inline';
           open.style.display = 'none';

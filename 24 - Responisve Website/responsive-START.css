@@ -74,6 +74,7 @@ img {
 /* MENU */
 .menu {
   display: grid;
+  perspective: 800px;
 }
 
 .close {
@@ -87,11 +88,24 @@ ul {
 
 #menu-list {
   display: grid;
+  overflow: hidden;
+  max-height: 0;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   grid-gap: 10px;
   justify-content: stretch;
   align-items: stretch;
   align-content: stretch;
+  transition: transform 0.8s;
+  transform: rotateX(90deg);
+  transform-style: preserve-3d;
+}
+
+.menu button[aria-expanded='false'] ~ #menu-list {
+  transform: rotateX(90deg);
+}
+
+.menu button[aria-expanded='true'] ~ #menu-list {
+  transform: rotateX(0deg);
 }
 
 .menu ul {
@@ -114,39 +128,15 @@ a {
 .menu button {
   display: none;
 }
-
+/*  Features */
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
 }
 
-button[aria-expanded='false'] ~ #menu-list {
-  transform: rotateX(-120deg);
-  animation: close 0.5s ease-in;
-}
-button[aria-expanded='true'] ~ #menu-list {
-  animation: open 0.5s ease-in;
-}
-
-@keyframes open {
-  0% {
-  }
-  100% {
-    transform: rotateX(halfturn);
-  }
-}
-
-@keyframes close {
-  0% {
-    transform: rotateX(-150deg);
-  }
-  100% {
-  }
-}
-
 .feature {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.09);
   justify-items: center;
   align-items: center;
   text-align: center;
@@ -161,6 +151,48 @@ button[aria-expanded='true'] ~ #menu-list {
 
 .icon {
   font-size: 50px;
+}
+
+/* About */
+.about {
+  background-color: white;
+  padding: 50px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+}
+
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 10px;
+}
+
+.gallery img {
+  width: 100%;
+}
+
+.gallery h2 {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-self: center;
+  align-self: center;
+  grid-column: 1/-1;
+  width: 100%;
+}
+
+.gallery > h2::before {
+  background-image: linear-gradient(to right, #ffc60000, #ffc600ff);
+  content: '';
+  height: 10px;
+}
+.gallery > h2::after {
+  background-image: linear-gradient(to left, #ffc60000, #ffc600ff);
+  content: '';
+  height: 10px;
 }
 
 @media (max-width: 700px) {
